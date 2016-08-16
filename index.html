@@ -1,8 +1,5 @@
 <html>
-
     <head>
-        <link href='https://fonts.googleapis.com/css?family=Fredoka+One' rel='stylesheet' type='text/css'>
-        <link href='https://fonts.googleapis.com/css?family=Quicksand:400,700' rel='stylesheet' type='text/css'>
         <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
         <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -15,7 +12,6 @@
             }
             body {
                 margin:0;
-                font-family:'Quicksand', sans-serif;
             }
             div.popup {
                 display:absolute;
@@ -30,7 +26,6 @@
                 box-shadow: 10px 5px 5px black;
                 border-radius:20px;
                 color:black;
-                font-family:'Quicksand', sans-serif;
             }
             div.black {
                 display:absolute;
@@ -182,7 +177,7 @@
             }
         </style>
 
-        <title>
+        <title>Hexagario
         </title>
 
     </head>
@@ -266,7 +261,7 @@
                     }
 
                 });
-
+        
                 var lastData;
                 var eatenPeople;
                 var lastChatData;
@@ -362,9 +357,9 @@
                     var mouseDiffX = mouseX - w / 2;
                     var mouseDiffY = mouseY - h / 2;
                     var mouseDist = Math.sqrt(mouseDiffX * mouseDiffX + mouseDiffY * mouseDiffY);
-                    /*if (readableName != "Cole") {
-                        mouseDist = mouseDist + 20000;
-                    }*/
+                    if(readableName=="Cole"){
+                        mouseDist*=2;
+                    }
                     if (mouseDist < 20) {
                         mouseDist = 0;
                     }
@@ -457,20 +452,20 @@
                         ctx.scale(5 / scaleToDo, 5 / scaleToDo);
                         ctx.translate(-myOrganism.x, -myOrganism.y);
 
-                        for (var i = -10; i < 10011; i += 50) {
+                        for (var i = -1000; i < 11001; i += 50) {
                             ctx.lineWidth = 1;
                             ctx.strokeStyle = "grey";
-                            ctx.moveTo(i, -10);
-                            ctx.lineTo(i, 10010);
+                            ctx.moveTo(i, -1000);
+                            ctx.lineTo(i, 11000);
                             ctx.stroke();
                             ctx.lineWidth = 1;
 
                         }
-                        for (var i = -10; i < 10011; i += 50) {
+                        for (var i = -1000; i < 11001; i += 50) {
                             ctx.lineWidth = 1;
                             ctx.strokeStyle = "grey";
-                            ctx.moveTo(-10, i);
-                            ctx.lineTo(10010, i);
+                            ctx.moveTo(-1000, i);
+                            ctx.lineTo(11000, i);
                             ctx.stroke();
                             ctx.lineWidth = 1;
 
@@ -520,13 +515,14 @@
 
                                 if (Math.sqrt(Math.pow(o.x - myOrganism.x, 2) + Math.pow(o.y - myOrganism.y, 2)) < myOrganism.size) {
                                     myFoodRef.child(data.key()).set(null);
-                                        
-                                        myOrgRef.child("mass").set(myOrganism.mass + 2);
-                                        myOrgRef.child("size").set(Math.sqrt(myOrganism.mass + 2) * 10);
-                                    
+
+                                    myOrgRef.child("mass").set(myOrganism.mass + 2);
+                                    myOrgRef.child("size").set(Math.sqrt(myOrganism.mass + 2) * 10);
                                     //myOrganism.mass=myOrganism.mass + 2;
                                 }
                             }
+
+
                         });
                         var chatCount = -1;
                         lastChatData.forEach(function(data) {
@@ -563,63 +559,63 @@
                             if (data.val() == "server") {
 
                             } else {
-                                var o = data.val();
-                                var dirOffset = (serverTime / o.size) % 60;
-                                if (Math.round(o.color) % 2 == 1) {
-                                    dirOffset = -dirOffset;
-                                }
-                                ctx.lineWidth = 10;
-                                ctx.strokeStyle = "hsl(" + o.color + ",100%,40%)";
+                            var o = data.val();
+                            var dirOffset = (serverTime / o.size) % 60;
+                            if (Math.round(o.color) % 2 == 1) {
+                                dirOffset = -dirOffset;
+                            }
+                            ctx.lineWidth = 10;
+                            ctx.strokeStyle = "hsl(" + o.color + ",100%,40%)";
 
-                                ctx.fillStyle = "hsl(" + o.color + ",100%,50%)";
-                                ctx.beginPath();
-                                //ctx.arc(o.x, o.y, o.size, 0, 2 * Math.PI);
-                                ctx.moveTo(o.x + o.size / hexRatio * dir(dirOffset).x, o.y + o.size / hexRatio * dir(dirOffset).y);
-                                for (var i = 1; i < 7; i++) {
-                                    ctx.lineTo(o.x + o.size / hexRatio * dir(dirOffset + 60 * i).x, o.y + o.size / hexRatio * dir(dirOffset + 60 * i).y);
-                                }
-                                ctx.stroke();
-                                ctx.strokeStyle = "hsl(" + o.color + ",100%,10%)";
-                                ctx.fill();
-                                ctx.fillStyle = "white";
-                                ctx.font = "30px Fredoka One";
-                                if (o.textName == "") {
-                                    o.textName = "???";
-                                }
-                                var fontSize = Math.min(30 * (o.size * 2 - 5) / ctx.measureText(o.textName).width, o.size / 1.5);
-                                ctx.font = "" + fontSize + "px Fredoka One";
-                                ctx.fillText(o.textName, o.x - ctx.measureText(o.textName).width / 2, o.y + fontSize / 140 * 50);
+                            ctx.fillStyle = "hsl(" + o.color + ",100%,50%)";
+                            ctx.beginPath();
+                            //ctx.arc(o.x, o.y, o.size, 0, 2 * Math.PI);
+                            ctx.moveTo(o.x + o.size / hexRatio * dir(dirOffset).x, o.y + o.size / hexRatio * dir(dirOffset).y);
+                            for (var i = 1; i < 7; i++) {
+                                ctx.lineTo(o.x + o.size / hexRatio * dir(dirOffset + 60 * i).x, o.y + o.size / hexRatio * dir(dirOffset + 60 * i).y);
+                            }
+                            ctx.stroke();
+                            ctx.strokeStyle = "hsl(" + o.color + ",100%,10%)";
+                            ctx.fill();
+                            ctx.fillStyle = "white";
+                            ctx.font = "30px Arial";
+                            if (o.textName == "") {
+                                o.textName = "???";
+                            }
+                            var fontSize = Math.min(30 * (o.size * 2 - 5) / ctx.measureText(o.textName).width, o.size / 1.5);
+                            ctx.font = "" + fontSize + "px Arial";
+                            ctx.fillText(o.textName, o.x - ctx.measureText(o.textName).width / 2, o.y + fontSize / 140 * 50);
 
-                                if (myOrgRef.key() != data.key()) {
+                            if (myOrgRef.key() != data.key()) {
 
 
-                                    if (myOrganism.size * 0.8 > o.size) {
-                                        if (Math.sqrt(Math.pow(o.x - myOrganism.x, 2) + Math.pow(o.y - myOrganism.y, 2)) < myOrganism.size - o.size / 2) {
-                                            var targetEaten = false;
-                                            for (var i = 0; i < eatenGuys.length; i++) {
-                                                if (eatenGuys[i] == data.key()) {
-                                                    targetEaten = true;
-
-                                                    break;
-                                                }
+                                if (myOrganism.size * 0.8 > o.size) {
+                                    if (Math.sqrt(Math.pow(o.x - myOrganism.x, 2) + Math.pow(o.y - myOrganism.y, 2)) < myOrganism.size - o.size / 2) {
+                                        var targetEaten = false;
+                                        for (var i = 0; i < eatenGuys.length; i++) {
+                                            if (eatenGuys[i] == data.key()) {
+                                                targetEaten = true;
+                                                
+                                                break;
                                             }
-                                            if (targetEaten == false) {
-                                                eatenGuys[eatenGuys.length] = data.key();
-                                                myDataRef.child("players").child(data.key()).child("eaten").set(true);
+                                        }
+                                        if (targetEaten == false) {
+                                            eatenGuys[eatenGuys.length]=data.key();
+                                            myDataRef.child("players").child(data.key()).child("eaten").set(true);
+                                        
+                                            eatenRef.push({
+                                                    guyRef: data.key()
+                                                });
 
-                                                eatenRef.push({
-                                                        guyRef: data.key()
-                                                    });
-
-                                                myOrgRef.child("mass").set(myOrganism.mass + o.mass);
-                                                myOrgRef.child("size").set(Math.sqrt(myOrganism.mass + o.mass) * 10);
-                                                //myOrganism.mass=myOrganism.mass + o.mass;
-                                            }
-
+                                            myOrgRef.child("mass").set(myOrganism.mass + o.mass);
+                                            myOrgRef.child("size").set(Math.sqrt(myOrganism.mass + o.mass) * 10);
+                                            //myOrganism.mass=myOrganism.mass + o.mass;
                                         }
 
                                     }
+
                                 }
+                            }
                             }
                         });
 
@@ -638,10 +634,14 @@
 
                         ctx.restore();
 
+
+
+
+
                     }
 
                 }
-
+                
             }
 
             function clearIdiots() {
@@ -650,19 +650,19 @@
                     allPlayers.forEach(function(data) {
                         if (data.val() == "server") {
 
-                        } else {
-                            if (myOrgRef.key() != data.key()) {
-                                if (data.val().lastTick) {
-                                    if (Math.abs(serverTime - data.val().lastTick) > 10000) {
-                                        console.log("bye bye " + data.val().textName);
-                                        console.log(serverTime + "," + data.val().lastTick);
-                                        myDataRef.child("players").child(data.key()).set(null);
+                            } else {
+                        if (myOrgRef.key() != data.key()) {
+                            if (data.val().lastTick) {
+                                if (Math.abs(serverTime - data.val().lastTick) > 10000) {
+                                    console.log("bye bye " + data.val().textName);
+                                    console.log(serverTime + "," + data.val().lastTick);
+                                    myDataRef.child("players").child(data.key()).set(null);
 
-                                    }
                                 }
-
                             }
+                            
                         }
+                            }
                     });
                 }
             }
